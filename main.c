@@ -18,8 +18,8 @@ int checkpoint(int i,int j);
 
 
 int CheckBan(int i,int j);
-int ArrayForCheckBan[SIZE][SIZE];
 void InnerBoardToCheckBoard();
+int CheckBoard[SIZE][SIZE];
 int player;
 int input(int);
 
@@ -140,11 +140,6 @@ void innerLayoutToDisplayArray(void){//½«arrayForInnerBoardLayoutÖĞ¼ÇÂ¼µÄÆå×ÓÎ»Ö
  
 }
 
-//½«ĞÄÖĞµÄÆåÅÌ×ª»¯³ÉÏëÏóÖĞµÄÆåÅÌ,ÓÃÓÚ¼ìÑé½ûÊÖ
-void InnerBoardToCheckBoard(){
-    
-}
-
 
 
 //ÏÔÊ¾ÆåÅÌ¸ñ¾Ö 
@@ -171,6 +166,15 @@ void displayBoard(void){
          printf("\n");
 } 
 
+void InnerBoardToCheckBoard(){//½«ĞÄÖĞµÄÆåÅÌ×ª»¯ÎªÓÃÓÚ¼ì²é½ûÊÖµÄÆåÅÌ
+    for(int i=0;i<SIZE;i++){
+        for(int j=0;j<SIZE;j++){
+            CheckBoard[i][j]=arrayForInnerBoardLayout[i][j];
+        }
+    }
+}
+
+
 int input(int player){
     printf("ÇëÊäÈëÏÂ×ÓÎ»ÖÃÈç:12 h Èç¹ûÒª½áÊø£¬ ÇëÊäÈë88\n");
     int check;
@@ -192,6 +196,7 @@ int input(int player){
     else{
         innerLayoutToDisplayArray();
         arrayForInnerBoardLayout[r][n]=player;
+        InnerBoardToCheckBoard();//½«ÓÃÓÚ¼ì²éµÄÆåÅÌºÍĞÄÖĞµÄÆåÅÌÍ¬²½
         if(player==1){
             arrayForDisplayBoard[SIZE-r-1][2*n]=play1CurrentPic[0];
             arrayForDisplayBoard[SIZE-r-1][2*n+1]=play1CurrentPic[1];
@@ -206,7 +211,6 @@ int input(int player){
             arrayForDisplayBoard[SIZE-r-1][2*n]=play2CurrentPic[0];
             arrayForDisplayBoard[SIZE-r-1][2*n+1]=play2CurrentPic[1];
             displayBoard();
-            // *p=1;
             return 1;
             }
     }
