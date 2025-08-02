@@ -1,97 +1,155 @@
+/*
+ÖĞ¹ú¿ÆÑ§Ôº´óÑ§wcgÎå×ÓÆåÆÚÄ©´ó×÷Òµ
+×÷Õß£ºÑ¦ÒíÖÛ
+ÒÔÏÂÎªÖ÷º¯Êı
+*/
+#include "wincheck.h"
+#include "checkban.h"
+#include "variable.h"
+#include "shape.h"
+#include "score.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #define SIZE 15
 #define CHARSIZE 2
-void initRecordBorard(void);
-void innerLayoutToDisplayArray(void);
-void displayBoard(void);
-void initialDispay();
 
 
-int wincheck();
-int check_row(int i,int j);
-int check_col(int i,int j);
-int check_A_to_D(int i,int j);
-int check_B_to_C(int i,int j);
-int checkpoint(int i,int j);
-
-
-int CheckBan(int i,int j);
-void InnerBoardToCheckBoard();
-int CheckBoard[SIZE][SIZE];
-int player;
-int input(int);
-
-//ÆåÅÌÊ¹ÓÃµÄÊÇGBK±àÂë£¬Ã¿Ò»¸öÖĞÎÄ×Ö·ûÕ¼ÓÃ2¸ö×Ö½Ú¡£
-
-//¿ÕÆåÅÌÄ£°å 
-char arrayForEmptyBoard[SIZE][SIZE*CHARSIZE+1] = 
-{
-		"©³©Ó©Ó©Ó©Ó©Ó©Ó©Ó©Ó©Ó©Ó©Ó©Ó©Ó©·",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©Ä©à©à©à©à©à©à©à©à©à©à©à©à©à©Ì",
-		"©»©Û©Û©Û©Û©Û©Û©Û©Û©Û©Û©Û©Û©Û©¿"
-};
-//´ËÊı×é´æ´¢ÓÃÓÚÏÔÊ¾µÄÆåÅÌ 
-char arrayForDisplayBoard[SIZE][SIZE*CHARSIZE+1];
- 
-char play1Pic[]="¡ñ";//ºÚÆå×Ó;
-char play1CurrentPic[]="¡ø"; 
-
-char play2Pic[]="¡ò";//°×Æå×Ó;
-char play2CurrentPic[]="¡÷";
-
-//´ËÊı×éÓÃÓÚ¼ÇÂ¼µ±Ç°µÄÆåÅÌµÄ¸ñ¾Ö 
-int arrayForInnerBoardLayout[SIZE][SIZE];
-
-
-
+int human_input(int);
 int main()
 
 {
-
+    system("clear");
     initRecordBorard();    //³õÊ¼»¯Ò»¸ö¿ÕÆåÅÌ
     innerLayoutToDisplayArray();  //½«ĞÄÖĞµÄÆåÅÌ×ª³ÉÓÃÓÚÏÔÊ¾µÄÆåÅÌ
     initialDispay();
-    displayBoard();          //ÏÔÊ¾ÆåÅÌ
+    // displayBoard();          //ÏÔÊ¾ÆåÅÌ
+    printf("»¶Ó­À´µ½Îå×ÓÆåÓÎÏ·, ÖÆ×÷Õß£º 2306Ñ¦ÒíÖÛ\n");
+    printf("\n");
+    printf("ÇëÑ¡ÔñÓÎÏ·Ä£Ê½£º\n");
+    printf("\n");
+    printf("ÈËÈË¶ÔÕ½Ä£Ê½ÇëÊäÈë1\n");
+    printf("ÈË»ú¶ÔÕ½ÇëÊäÈë2\n");
+    printf("\n");
+    printf("ÇëÊäÈë£º");
+
+    int out=0;
+    int player;
+
+    int mode;
+    scanf("%d",&mode);
+    displayBoard();
+    if(mode==1){
+        player=1;
+        while(player!=0 && player!=3 && out==0){
+            player=human_input(player);
+            out=wincheck();
+        }
+        if(out==1){
+            printf("ºÚ·½»ñÊ¤");
+            return 0; 
+        }
+        else if (out==2){
+            printf("°×·½»ñÊ¤");
+            return 0;
+        }
+        if(player==3){
+            printf("³öÏÖ½ûÊÖ,°×·½Ê¤");
+            return 0;
+        }
+    }
     
-
-    player=1;
-    int out=wincheck();
-    int check=0;
-    while(player!=0 && player!=3 && out==0){
-        
-        player=input(player);
-        out=wincheck();
-        
+    if(mode==2){
+        printf("ÇëÑ¡ÔñÏÈºóÊÖ,ÏÈÊÖÊäÈë1,ºóÊÖÊäÈë2\n");
+        printf("\n");
+        printf("ÇëÊäÈë£º");
+        int mode2;
+        scanf("%d",&mode2);//±íÊ¾Ñ¡ÔñÁËÄ£Ê½
+        if(mode2 == 1){
+            human_type=1;
+            ai_type=2;
+            while(1){
+                player = human_input(1);
+                while (player == 1){
+                    player = human_input(1);
+                }
+                if(player==3){
+                    break;
+                }
+                out = wincheck();
+                if(out){
+                    break;
+                }
+                if(player==0){
+                    return 0;
+                }
+                printf("ÕıÔÚ¼ÆËã£¬ÇëÉÔºò...\n");
+                ai_place(2);
+                out = wincheck();
+                if(out){
+                    break;
+                }
+            }
+            if(out == 1){
+                printf("ºÚ·½»ñÊ¤");
+                return 0;
+            }
+            else if(out == 2){
+                printf("°×·½»ñÊ¤");
+                return 0;
+            }
+            else if(player == 3){
+                printf("³öÏÖ½ûÊÖ,°×·½Ê¤");
+                return 0;
+            }
+        }
+        else{
+            human_type=2;
+            ai_type=1;
+            arrayForInnerBoardLayout[7][7] = 1;//Èç¹ûÊÇaiÏÈÊÖ, ÔòÖ±½ÓÏÂÔÚÌìÔª
+            innerLayoutToDisplayArray();
+            displayBoard();
+            human_input(2);
+            while(1){
+                printf("AI is calculating\n");
+                player = ai_place(1);
+                if(player==3){
+                    break;
+                }
+                out = wincheck();
+                if(out){
+                    break;
+                }
+                player = human_input(2);
+                while (player == 2){
+                    player = human_input(2);
+                }
+                out = wincheck();
+                if(out){
+                    break;
+                }
+                if(player==0){
+                    return 0;
+                }
+            }
+            if(out == 1){
+                printf("ºÚ·½»ñÊ¤");
+                return 0;
+            }
+            else if(out == 2){
+                printf("°×·½»ñÊ¤");
+                return 0;
+            }
+            else if(player == 3){
+                printf("³öÏÖ½ûÊÖ,°×·½Ê¤");
+                return 0;
+            }
+        }
     }
-    if(player==3){
-        printf("³öÏÖ½ûÊÖ,°×·½Ê¤");
-        return 0;
-    }
-    if(out==1){
-        printf("ºÚ·½»ñÊ¤");
-        return 0; 
-    }
-    else if (out==2){
-        printf("°×·½»ñÊ¤");
-        return 0;
-    }
-
-    return 0;
 }
+
+    
 
 //³õÊ¼»¯Ò»¸ö¿ÕÆåÅÌ¸ñ¾Ö 
 void initRecordBorard(void){
@@ -145,7 +203,7 @@ void innerLayoutToDisplayArray(void){//½«arrayForInnerBoardLayoutÖĞ¼ÇÂ¼µÄÆå×ÓÎ»Ö
 //ÏÔÊ¾ÆåÅÌ¸ñ¾Ö 
 void displayBoard(void){
 	//µÚÒ»²½£ºÇåÆÁ
-	system("clear");   //ÇåÆÁ  
+	// system("clear");   //ÇåÆÁ  
 	//µÚ¶ş²½£º½«arrayForDisplayBoardÊä³öµ½ÆÁÄ»ÉÏ
     int i,j;
         for(i=0; i<SIZE; i++){
@@ -175,18 +233,18 @@ void InnerBoardToCheckBoard(){//½«ĞÄÖĞµÄÆåÅÌ×ª»¯ÎªÓÃÓÚ¼ì²é½ûÊÖµÄÆåÅÌ
 }
 
 
-int input(int player){
+int human_input(int player){
     printf("ÇëÊäÈëÏÂ×ÓÎ»ÖÃÈç:12 h Èç¹ûÒª½áÊø£¬ ÇëÊäÈë88\n");
     int check;
     int r;
     char c;
-    int *p=&player;
     scanf("%d",&r);
     if(r==88){return 0;}
     scanf("%c",&c);
     r=r-1;
     int n;
     n=c-'a';
+    printf("%d\n",arrayForDisplayBoard[r][n]);
     if(n<0||r<0 ||r>=SIZE || n>=SIZE || arrayForInnerBoardLayout[r][n]!=0){
         printf("ÊäÈëµÄÎ»ÖÃ²»ºÏ·¨£¬ÇëÖØĞÂÊäÈë\n");
         // printf("%d\n",arrayForDisplayBoard[r][n]);
@@ -197,11 +255,18 @@ int input(int player){
         innerLayoutToDisplayArray();
         arrayForInnerBoardLayout[r][n]=player;
         InnerBoardToCheckBoard();//½«ÓÃÓÚ¼ì²éµÄÆåÅÌºÍĞÄÖĞµÄÆåÅÌÍ¬²½
+        // Evaluate eval;
+        // memcpy(eval.board, arrayForInnerBoardLayout, sizeof(arrayForInnerBoardLayout));
+        // // int score = evaluate_board(&eval, player);
+        // // printf("current score:%d\n",score);
+        // point p = {r,n};
+        // shape shpe;
+        // shpe = check_shape(&eval,&p,player);
         if(player==1){
             arrayForDisplayBoard[SIZE-r-1][2*n]=play1CurrentPic[0];
             arrayForDisplayBoard[SIZE-r-1][2*n+1]=play1CurrentPic[1];
             displayBoard();//Õ¹Ê¾ÆåÅÌ
-            if(CheckBan(r,n)==1){
+            if(CheckBan(CHECKBAN_DEPTH,r,n)==1){
                 return 3;
             }
             return 2;
@@ -216,139 +281,82 @@ int input(int player){
     }
 }
 
-int wincheck(){
-    int i, j;
-    int out = 0;
-    for(i = 0; i < SIZE; i++){
-        for(j = 0; j < SIZE; j++){
-            if(checkpoint(i, j) != 0){
-                return checkpoint(i,j);
-            }
-        }
+int ai_place(int role) {
+    printf("CURRENTMODE DEPTH=%d\n",(minimax_mode==0)?4:2);
+    clock_t time1 = clock();
+    innerLayoutToDisplayArray();
+    Evaluate eval;
+    memcpy(eval.board, arrayForInnerBoardLayout, sizeof(arrayForInnerBoardLayout));//½«µ±Ç°ÆåÅÌ¸ñ¾ÖÉÏ´«µ½evalÖĞ
+    int score;
+    Path path;
+    if(check_absolute_win(&eval,role)){
+        printf("ABSOLUTE WI N DETECTED\n");
+        displayBoard();
     }
-    return 0;
-}
-
-
-
-int checkpoint(int i,int j){
-    if((check_row(i,j)!=0) ||(check_col(i,j)!=0) || (check_A_to_D(i,j)!=0) || (check_B_to_C(i,j)!=0))
-        return arrayForInnerBoardLayout[i][j];
-}
-
-int check_row(int i, int j) {
-    int out = 0;
-    int c = arrayForInnerBoardLayout[i][j];
-    int k, r;
-
-    // æ£€æŸ¥ä½ç½? j çš„å·¦å³ä¸¤ä¾§æœ€å¤? 4 ä¸ªä½ç½?
-    int start = j - 4 > 0 ? j - 4 : 0;
-    int end = j + 4 < 14 ? j + 4 : 14;
-
-    for (k = start; k <= j; k++) {
-        int win = 1;
-        for (r = 0; r < 5; r++) {
-            if (k + r > end || arrayForInnerBoardLayout[i][k + r] != c) {
-                win = 0;
-                break;
-            }
-        }
-        if (win) {
-            out = c;
-            break;
-        }
+    else if(check_must_block_attack(&eval,role)){
+        printf("HAVE TO BLOCK DETECTED\n");
+        displayBoard();
     }
-    return out;
-}
-
-int check_col(int i, int j) {
-    int out = 0;
-    int c = arrayForInnerBoardLayout[i][j];
-    int k, r;
-
-    // æ£€æŸ¥ä½ç½? j çš„å·¦å³ä¸¤ä¾§æœ€å¤? 4 ä¸ªä½ç½?
-    int start = i - 4 > 0 ? i - 4 : 0;
-    int end = i + 4 < 14 ? i + 4 : 14;
-
-    for (k = start; k <= i; k++) {
-        int win = 1;
-        for (r = 0; r < 5; r++) {
-            if (k + r > end || arrayForInnerBoardLayout[k+r][j] != c) {
-                win = 0;
-                break;
-            }
+    else if(minimax_mode==0){
+        score = minimax_alphaBeta(&eval, DEPTH, -INFTY, INFTY, role, &path);
+        clock_t time2 = clock();
+        arrayForInnerBoardLayout[path.moves[0][0]][path.moves[0][1]] = role;//½«aiµÄÂä×Ó·Åµ½ÆåÅÌÖĞ
+        if(role == 1){
+            arrayForDisplayBoard[SIZE-path.moves[0][0]-1][2*path.moves[0][1]]=play1CurrentPic[0];
+            arrayForDisplayBoard[SIZE-path.moves[0][0]-1][2*path.moves[0][1]+1]=play1CurrentPic[1];
         }
-        if (win) {
-            out = c;
-            break;
+        else{
+            arrayForDisplayBoard[SIZE-path.moves[0][0]-1][2*path.moves[0][1]]=play2CurrentPic[0];
+            arrayForDisplayBoard[SIZE-path.moves[0][0]-1][2*path.moves[0][1]+1]=play2CurrentPic[1];
         }
+        displayBoard();
+        printf("AI score: %d\n", score);
+        printf("AI places at (%d,%c)\n",path.moves[0][0]+1,'A'+path.moves[0][1]);
+        double time = ((double) (time2 - time1) / CLOCKS_PER_SEC);
+        if(time >= 15.0){minimax_mode = 1;printf("CHANGING_MODE:%d\n",minimax_mode);}
+        printf("USED_TIME :%f s\n",time);
+        printf("CHECKBAN_TIME :%f s\n",time_checkban);
+        printf("SIMPLEBAN_TIME :%f s\n",time_simpleban);
+        printf("SHAPE_TIME :%f s\n",time_shape);
+        // printf("check shape number:%d\n",pivot);
+        // printf("check board times:%d\n",times_board);
+        time_checkban=0,time_simpleban=0,time_shape=0,pivot=0,time = 0;
     }
-    return out;
-}
-
-int check_A_to_D(int i, int j){
-    int out = 0;
-    int c = arrayForInnerBoardLayout[i][j];
-    int k;
-
-    for(k = -4; k <= 0; k++){
-        int count = 0;
-        int r;
-        int start_i = i + k;
-        int start_j = j + k;
-
-
-        if(start_i < 0 || start_j < 0)
-            continue;
-
-
-        if(start_i + 4 >= SIZE|| start_j + 4 >= SIZE)
-            continue;
-
-
-        for(r = 0; r < 5; r++){
-            if(arrayForInnerBoardLayout[start_i + r][start_j + r] != c)
-                break;
-            else
-                count++;
+    else{
+        score = minimax_alphaBeta_2(&eval, DEPTH2, -INFTY, INFTY, role, &path);
+        clock_t time2 = clock();
+        arrayForInnerBoardLayout[path.moves[0][0]][path.moves[0][1]] = role;//½«aiµÄÂä×Ó·Åµ½ÆåÅÌÖĞ
+        if(role == 1){
+            arrayForDisplayBoard[SIZE-path.moves[0][0]-1][2*path.moves[0][1]]=play1CurrentPic[0];
+            arrayForDisplayBoard[SIZE-path.moves[0][0]-1][2*path.moves[0][1]+1]=play1CurrentPic[1];
         }
-        if(count == 5){
-            out = c;
-            break;
+        else{
+            arrayForDisplayBoard[SIZE-path.moves[0][0]-1][2*path.moves[0][1]]=play2CurrentPic[0];
+            arrayForDisplayBoard[SIZE-path.moves[0][0]-1][2*path.moves[0][1]+1]=play2CurrentPic[1];
         }
+        displayBoard();
+        printf("AI score: %d\n", score);
+        printf("AI places at (%d,%c)\n",path.moves[0][0]+1,'A'+path.moves[0][1]);
+        double time = ((double) (time2 - time1) / CLOCKS_PER_SEC);
+        printf("USED_TIME :%f s\n",time);
+        printf("CHECKBAN_TIME :%f s\n",time_checkban);
+        printf("SIMPLEBAN_TIME :%f s\n",time_simpleban);
+        printf("SHAPE_TIME :%f s\n",time_shape);
+        // printf("check shape number:%d\n",pivot);
+        // printf("check board times:%d\n",times_board);
+        time_checkban=0,time_simpleban=0,time_shape=0,pivot=0,time=0;
     }
-    return out;
-}
 
-int check_B_to_C(int i, int j){
-    int out = 0;
-    int c = arrayForInnerBoardLayout[i][j];
-    int k;
-
-    for(k = -4; k <= 0; k++){
-        int count = 0;
-        int r;
-        int start_i = i - k;
-        int start_j = j + k;
-
-        if(start_i >= SIZE || start_j < 0)
-            continue;
-
-  
-        if(start_i - 4 < 0 || start_j + 4 >= SIZE)
-            continue;
-
-        for(r = 0; r < 5; r++){
-            if(arrayForInnerBoardLayout[start_i - r][start_j + r] != c)
-                break;
-            else
-                count++;
+    if(role==1){
+        InnerBoardToCheckBoard();
+        if(CheckBan(CHECKBAN_DEPTH,path.moves[0][0],path.moves[0][1])==1){
+            return 3;
         }
-        if(count == 5){
-            out = c;
-            break;
-        }
+        else
+            return 0;
     }
-    return out;
-
+    else{
+        return 0;
+    }
 }
+
